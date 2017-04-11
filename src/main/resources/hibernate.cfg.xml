@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.url">jdbc:sqlite:E:/T.s3db</property>
+        <property name="connection.driver_class">org.sqlite.JDBC</property>
+        <property name="hibernate.dialect">com.enigmabridge.hibernate.dialect.SQLiteDialect</property>
+        <mapping class="hibernate.dao.GroupsEntity"/>
+        <mapping class="hibernate.dao.QuestionsEntity"/>
+        <mapping class="hibernate.dao.ResultsEntity"/>
+        <mapping class="hibernate.dao.TestsEntity"/>
+
+        <mapping class="hibernate.dao.VariantsEntity"/>
+        <mapping class="hibernate.dao.Teacher"/>
+        <mapping class="hibernate.dao.Pupil"/>
+        <!-- <property name="connection.username"/> -->
+        <!-- <property name="connection.password"/> -->
+
+        <!-- DB schema will be updated if needed -->
+        <!-- <property name="hbm2ddl.auto">update</property> -->
+    </session-factory>
+</hibernate-configuration>
