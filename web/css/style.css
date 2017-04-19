@@ -1,92 +1,93 @@
 @CHARSET "UTF-8";
 *{
-	padding:0;
-	margin:0;
+    padding:0;
+    margin:0;
 }
 a{   text-decoration: none;}
 header {
     display: table;
 }
-#content{
-	margin:0 auto;
-	display:table;
+#content, .content {
+    margin: 0 auto;
+    display: table;
 }
 
-li {
+header li {
     float: left;
     display: block;
 }
 
 
 li.test, li.group,li.result {
-	float:none;
-	position:relative;
-	display: table;
+    float:none;
+    position:relative;
+    display: table;
 }
 ul.questions,ul.variants {
     position: relative;
     left: 20px;
 }
-li.test >label, li.group >label,li.result>label {
+li.test >button:nth-child(1), li.group >label,li.result>label {
     display: table;
     float: none;
     width: 200px;
     height: 30px;
     border: 1px solid #a47e12;
-   
+    background:none;
+
 }
-li.test >label:hover,li.question >label:hover,li.group >label:hover,li.result >label:hover{
-	background:#41adaf;
+li.test >button:nth-child(1):hover,li.question >label:hover,li.group >label:hover,li.result >label:hover{
+    background:#41adaf;
 }
 
-.test> label>span, .group> label>span,.result>label>span {
+.test> button>span, .group> label>span,.result>label>span {
     display: table-cell;
     vertical-align: middle;
     text-align: center;
 }
 
 .test> button, .group >button,.result>button {
-	position: absolute;
-	width: 20px;
-    height: 20px;
-	}
+    /* position: absolute; */
+    /* width: 20px; */
+    /* height: 20px; */
+}
 .test> button:nth-child(2), .group> button:nth-child(2),.result>button:nth-child(2){
-	top: 5px;
-	left: 130px;
+    /* top: 5px; */
+    /* left: 130px; */
 }
 .test >button:nth-child(3) , .group >button:nth-child(3){
-	top: 5px;
-	left: 150px;
+    top: 5px;
+    left: 150px;
 }
 
 .test> button:nth-child(4){
-	top: 5px;
+    top: 5px;
     left: 170px;
 }
 li.question,li.variant {
-   
+
     float: none;
 }
 li.question{
-	display: table;
-	position:relative;
+    display: table;
+    position:relative;
 }
 
 .hidden {
     display: none;
 }
 .question label{
-	display: table;
+    display: table;
     width: 170px;
     border: 1px solid #41ae45;
     height: 20px;
 }
 .question button{
-	position:absolute;
-	top:0;
-	right:5px;
-	width:20px;
-	height:20px;
+    /* position:absolute; */
+    /* top:0; */
+    /* right:5px; */
+    /* width:20px; */
+    height:20px;
 }
 
 .question> span {
@@ -129,7 +130,7 @@ ul#groups,ul#results {
     margin-left: 20px;
 }
 #start_test{
-	    width: 300px;
+    width: 300px;
     height: 300px;
     border: 1px solid #45ae21;
 }
@@ -137,5 +138,13 @@ form {
     float: left;
 }
 .red {
-	border: 1px solid red;
+    border: 1px solid red;
+}
+button.group {
+    background: none;
+    border: none;
+}
+
+button.group:hover {
+    background: #14ad12;
 }

@@ -38,7 +38,7 @@ public class TestsEntity {
     }
     //связь с потомком
     private Set<ResultsEntity> results = new HashSet<ResultsEntity>();
-    @OneToMany(mappedBy = "test",cascade=CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "test",cascade=CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 
     public Set<ResultsEntity> getResults() {
         return this.results;

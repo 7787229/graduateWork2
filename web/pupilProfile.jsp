@@ -114,12 +114,14 @@
                 <%} %>
             </div>
             <br>
-            <%if (numberQuestion!=0) {%>
-            <button name="prev" value="<%=numberQuestion%>">prev</button>
-            <%} %>
-            <% if (numberQuestion!=questions.size()-1) { %>
-            <button name="next" value="<%=numberQuestion%>">next</button>
-            <%} %>
+            <%
+                String disabledPrev="";
+                if (numberQuestion==0) disabledPrev="disabled";
+                String disabledNext="";
+                if (numberQuestion==questions.size()-1) disabledNext="disabled";
+            %>
+            <button <%=disabledPrev%> name="prev" value="<%=numberQuestion%>">prev</button>
+            <button <%=disabledNext%> name="next" value="<%=numberQuestion%>">next</button>
             <button name="send" value="<%=numberQuestion%>">send</button>
             <%} %>
         </div>
@@ -127,6 +129,26 @@
     <%
         op.disconnect();
     %>
+
+</div>
+<div id="final_test">
+    <table>
+        <%
+            if(request.getAttribute("final_test")!=null){
+                Float result = (Float) request.getAttribute("final_test");
+        %>
+        <script>
+            showWindow($("#final_test"),$("#final_test table"));
+        </script>
+        <tr>
+            <td>Ваш результат</td>
+            <td><%=result%>%</td>
+        </tr>
+        <tr>
+            <td><button>OK</button></td>
+        </tr>
+        <%}%>
+    </table>
 </div>
 </body>
 </html>

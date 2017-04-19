@@ -22,7 +22,7 @@ $(function(){
 	});	
 	
 	$("form").on("submit",function(e){
-		var inputs = $("input[type=text]:visible,input[type=password]:visible,textarea").not("[name=answerText]");
+        var inputs = $("input[type=text]:visible,input[type=password]:visible,textarea").not("[name=answerText]").not("[name=new_title_group]");
 		for(var i=0;i<inputs.length;i++) {
 			if(inputs.eq(i).val()==="") {
 				e.preventDefault();

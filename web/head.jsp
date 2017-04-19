@@ -25,10 +25,11 @@
     <title>Title</title>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.1.1.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/check.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/lib.js"></script>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-<div id="content">
+<div class="content">
     <header>
         <ul>
             <li><a href="${pageContext.request.contextPath}/index.jsp">Главная</a></li>

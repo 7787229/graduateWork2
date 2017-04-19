@@ -5,6 +5,8 @@ import hibernate.utils.Operation;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,102 +15,14 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Created by Alex on 10.04.2017.
  */
 @WebServlet("/SelectTest")
 public class SelectTestServlet extends HttpServlet {
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        Operation op= new Operation();
-        op.connect();
-        op.beginTransaction();
-            int idTest = Integer.parseInt( request.getParameter("idTest"));
-
-            TestsEntity test =(TestsEntity)op.getById(idTest,TestsEntity.class);
-            ArrayList<QuestionsEntity> questions = new ArrayList<QuestionsEntity>();
-            questions.addAll(test.getQuestions());
-            float sumScore=0;
-            for (QuestionsEntity question:questions) {
-                sumScore+=question.getScore();
-            }
-            HttpSession ses =request.getSession();
-            ses.setAttribute("sumScore", sumScore);
-            ses.setAttribute("numberQuestion", 0);
-            ses.setAttribute("test", test);
-            int [] results = new int[questions.size()];
-            ses.setAttribute("results",results);
-            HashMap<String, Object>[] historyAnswers = new HashMap[questions.size()];
-
-            ses.setAttribute("historyAnswers", historyAnswers);
-            op.commit();
-            op.disconnect();
-            RequestDispatcher Dispatcher = getServletContext().getRequestDispatcher("/pupilProfile.jsp");
-            Dispatcher.forward(request, response);
-
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        Operation op= new Operation();
-        op.connect();
-        op.beginTransaction();
-        HttpSession ses =request.getSession();
-        int numberQuestion = 0;
-
-        if ( request.getParameter("exit")!=null ) {
-            ses.invalidate();
-            response.sendRedirect("index.jsp");
-
-        }
-        if ( request.getParameter("next")!=null ) {
-            int current = Integer.parseInt(request.getParameter("next"));
-            ses.setAttribute("numberQuestion", current+1);
-            numberQuestion=current;
-        }
-
-        if ( request.getParameter("prev")!=null ) {
-            int current = Integer.parseInt(request.getParameter("prev"));
-            ses.setAttribute("numberQuestion", current-1);
-            numberQuestion=current;
-        }
-
-
-      /**  if ( request.getParameter("send")!=null ) {
-            int current = Integer.parseInt(request.getParameter("send"));
-            numberQuestion=current;
-        }**/
-        if ( request.getParameter("send")!=null ) {
-
-            TestsEntity test =    (TestsEntity) ses.getAttribute("test");
-            UsersEntity pupil =   (UsersEntity) (ses.getAttribute("currentSessionUser"));
-            int [] results = (int[]) ses.getAttribute("results");
-            float sumScore = (Float) ses.getAttribute("sumScore");
-            double sumResult=0;
-
-            for(int result:results) {
-                sumResult+=result;
-            }
-            float progress = (float) ((sumResult/sumScore)*100);
-
-            //System.out.println(progress);
-            //Controller.delete(new Result(test.getIdTeacher(),test.getIdTest(),currentUser.getIdPupil(),-1));
-            //Controller.create(new Result(test.getIdTeacher(),test.getIdTest(),currentUser.getIdPupil(),progress));
-            ResultsEntity result=new ResultsEntity();
-            result.setProgress(progress);
-            TestsEntity testsEntity = (TestsEntity)op.getById(test.getId(),TestsEntity.class);
-            testsEntity.getTeacher().addResult(result);
-            testsEntity.addResult(result);
-            Pupil pupil2 = (Pupil)op.getById(pupil.getId(),Pupil.class);
-            pupil2.addResult(result);
-            op.create(result);
-
-
-        }
-        if ( request.getParameter("exit")==null ) {
-
+    private void calcResults( HttpSession ses,ServletRequest request,ServletResponse response,int numberQuestion)  {
 
             int [] results = (int[]) ses.getAttribute("results");
             HashMap<String, Object> [] historyAnswers =  (HashMap<String, Object>[]) ses.getAttribute("historyAnswers");
@@ -116,7 +30,7 @@ public class SelectTestServlet extends HttpServlet {
             ArrayList <VariantsEntity> variants = (ArrayList<VariantsEntity>) ses.getAttribute("variants");
             int countVariants = variants.size();
 
-            if (request.getParameter("answerRadio")!=null) {
+        if (request.getParameter("answerRadio")!=null) {
                 int selectVariant = Integer.parseInt(request.getParameter("answerRadio"));
                 historyAnswers[numberQuestion] = new HashMap<String, Object>();
                 historyAnswers[numberQuestion].put("radio", selectVariant);
@@ -179,12 +93,117 @@ public class SelectTestServlet extends HttpServlet {
             }
             ses.setAttribute("results",results);
             ses.setAttribute("historyAnswers", historyAnswers);
-            op.commit();
-            op.disconnect();
-            RequestDispatcher Dispatcher = getServletContext().getRequestDispatcher("/pupilProfile.jsp");
-            Dispatcher.forward(request, response);
 
         }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+             request.setCharacterEncoding("UTF-8");
+            Operation op= new Operation();
+            op.connect();
+            op.beginTransaction();
+            int idTest = Integer.parseInt( request.getParameter("idTest"));
+
+            TestsEntity test =(TestsEntity)op.getById(idTest,TestsEntity.class);
+            ArrayList<QuestionsEntity> questions = new ArrayList<QuestionsEntity>();
+            questions.addAll(test.getQuestions());
+            float sumScore=0;
+            for (QuestionsEntity question:questions) {
+                sumScore+=question.getScore();
+            }
+            HttpSession ses =request.getSession();
+            ses.setAttribute("sumScore", sumScore);
+            ses.setAttribute("numberQuestion", 0);
+            ses.setAttribute("test", test);
+            int [] results = new int[questions.size()];
+            ses.setAttribute("results",results);
+            HashMap<String, Object>[] historyAnswers = new HashMap[questions.size()];
+
+            ses.setAttribute("historyAnswers", historyAnswers);
+            op.commit();
+            op.disconnect();
+            //RequestDispatcher Dispatcher = getServletContext().getRequestDispatcher("/pupilProfile.jsp");
+           // Dispatcher.forward(request, response);
+            response.sendRedirect("/pupilProfile.jsp");
+
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        HttpSession ses =request.getSession();
+        int numberQuestion = 0;
+
+        if ( request.getParameter("exit")!=null ) {
+            ses.invalidate();
+            response.sendRedirect("index.jsp");
+
+        }
+        if ( request.getParameter("next")!=null ) {
+            int current = Integer.parseInt(request.getParameter("next"));
+            ses.setAttribute("numberQuestion", current+1);
+            numberQuestion=current;
+            calcResults(ses,request,response,numberQuestion);
+            response.sendRedirect("/pupilProfile.jsp");
+        }
+
+        if ( request.getParameter("prev")!=null ) {
+            int current = Integer.parseInt(request.getParameter("prev"));
+            ses.setAttribute("numberQuestion", current-1);
+            numberQuestion=current;
+            calcResults(ses,request,response,numberQuestion);
+            response.sendRedirect("/pupilProfile.jsp");
+        }
+
+
+
+
+
+
+        if ( request.getParameter("send")!=null ) {
+            int current = Integer.parseInt(request.getParameter("send"));
+            numberQuestion=current;
+            calcResults(ses,request,response,numberQuestion);
+            Operation op =new Operation();
+            op.connect();
+            op.beginTransaction();
+            TestsEntity testSes =    (TestsEntity) ses.getAttribute("test");
+            UsersEntity pupilSes =   (UsersEntity) (ses.getAttribute("currentSessionUser"));
+            int [] results = (int[]) ses.getAttribute("results");
+            float sumScore = (Float) ses.getAttribute("sumScore");
+            double sumResult=0;
+
+            for(int result:results) {
+                sumResult+=result;
+            }
+            float progress = (float) ((sumResult/sumScore)*100);
+
+            for (ResultsEntity resultsEntity:testSes.getResults()){
+                if(resultsEntity.getPupil().getId()==pupilSes.getId()
+                        && resultsEntity.getTest().getId()==testSes.getId()){
+                    op.deleteById(resultsEntity.getId(),ResultsEntity.class);
+                    op.commit();
+                    op.disconnect();
+                    op.connect();
+                    op.beginTransaction();
+                }
+            }
+
+            ResultsEntity result = new ResultsEntity();
+            result.setProgress(progress);
+            TestsEntity test = (TestsEntity) op.getById(testSes.getId(), TestsEntity.class);
+            test.getTeacher().addResult(result);
+            test.addResult(result);
+            Pupil pupil = (Pupil) op.getById(pupilSes.getId(), Pupil.class);
+            pupil.addResult(result);
+            op.create(result);
+
+            op.commit();
+            op.disconnect();
+            ses.setAttribute("test", null);
+            request.setAttribute("final_test",progress);
+            RequestDispatcher Dispatcher = getServletContext().getRequestDispatcher("/pupilProfile.jsp");
+            Dispatcher.forward(request, response);
+        }
+
 
 
 
