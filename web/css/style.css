@@ -28,7 +28,6 @@ ul.questions,ul.variants {
     left: 20px;
 }
 li.test >button:nth-child(1), li.group >label,li.result>label {
-    display: table;
     float: none;
     width: 200px;
     height: 30px;
@@ -36,7 +35,7 @@ li.test >button:nth-child(1), li.group >label,li.result>label {
     background:none;
 
 }
-li.test >button:nth-child(1):hover,li.question >label:hover,li.group >label:hover,li.result >label:hover{
+li.test >button:nth-child(1):hover, li.question >button:hover, li.group >label:hover, li.result >label:hover{
     background:#41adaf;
 }
 
@@ -76,11 +75,11 @@ li.question{
 .hidden {
     display: none;
 }
-.question label{
-    display: table;
+.question button:nth-child(1){
     width: 170px;
     border: 1px solid #41ae45;
     height: 20px;
+    background: none;
 }
 .question button{
     /* position:absolute; */
@@ -100,6 +99,7 @@ header li {
     border: 1px solid #41ae17;
     width: 100px;
     text-align: center;
+    margin: 0;
 }
 
 header li:hover {
@@ -116,14 +116,13 @@ header a {
     display: block;
 }
 #tests li {
+    position: relative;
     float: none;
 }
 
 
 #groups li,#results li{float:none;}
-ul#tests {
-    float: left;
-}
+
 
 ul#groups,ul#results {
     float: right;
@@ -133,9 +132,7 @@ ul#groups,ul#results {
     width: 300px;
     height: 300px;
     border: 1px solid #45ae21;
-}
-form {
-    float: left;
+    padding: 5px;
 }
 .red {
     border: 1px solid red;
@@ -147,4 +144,33 @@ button.group {
 
 button.group:hover {
     background: #14ad12;
+}
+
+* {
+    /* padding: 2px; */
+}
+
+li {
+    list-style-type: none;
+    margin: 3px;
+}
+
+button {
+    margin: 3px;
+}
+
+hr {
+    width: 120%;
+    border-color: #45ae12;
+    margin: 5px 0px 5px 0px;
+}
+ul.options {
+    position: absolute;
+    top: 25px;
+    right: -170px;
+    z-index: 1;
+}
+
+.group .test label:hover {
+    background: #15ae25;
 }

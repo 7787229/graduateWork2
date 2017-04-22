@@ -132,11 +132,7 @@ public class SelectTestServlet extends HttpServlet {
         HttpSession ses =request.getSession();
         int numberQuestion = 0;
 
-        if ( request.getParameter("exit")!=null ) {
-            ses.invalidate();
-            response.sendRedirect("index.jsp");
 
-        }
         if ( request.getParameter("next")!=null ) {
             int current = Integer.parseInt(request.getParameter("next"));
             ses.setAttribute("numberQuestion", current+1);

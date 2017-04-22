@@ -22,6 +22,7 @@
 %>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Title</title>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.1.1.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/check.js"></script>
@@ -42,10 +43,12 @@
                 if(user.getRole().equals("teacher")) {
 
         %>
-        <span>Перейти к</span>	 <a href='${pageContext.request.contextPath}/teacherProfile.jsp'> <%= user.getLogin()%></a>
+        <span>Перейти к</span>	 <a style="display: inline" href='${pageContext.request.contextPath}/teacherProfile.jsp'> <%= user.getLogin()%></a>
         <% } if(user.getRole().equals("pupil")) {%>
-        <span>Перейти к</span> <a href='${pageContext.request.contextPath}/pupilProfile.jsp'> <%= user.getLogin()%></a>
-        <%}} %>
+        <span>Перейти к</span> <a style="display: inline" href='${pageContext.request.contextPath}/pupilProfile.jsp'> <%= user.getLogin()%></a>
+        <%} %>
+        <button onclick="window.location.href = '${pageContext.request.contextPath}/login/Login?exit=1 %>'"> Выход</button>
+        <%}%>
     </header>
 </div>
 </body>

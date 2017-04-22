@@ -18,8 +18,13 @@ import java.io.IOException;
 @WebServlet("/login/Login")
 public class LoginServlet extends HttpServlet {
 
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+            request.getSession().invalidate();
+            response.sendRedirect("../index.jsp");
+
+    }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         String login= request.getParameter("login");
         String password = request.getParameter("password");

@@ -9,17 +9,18 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
-    <title>Title</title>
-</head>
-<body>
-<%@ include file="head.jsp" %>
 <%
     Operation op = new Operation();
     op.connect();
     int idGroup = (Integer)request.getAttribute("id_group");
     GroupsEntity group = (GroupsEntity)op.getById(idGroup,GroupsEntity.class);
 %>
+<head>
+    <title>Группа <%=group.getTitle()%></title>
+</head>
+<body>
+<%@ include file="head.jsp" %>
+
 <div class="content" >
     <h1><%=group.getTitle()%></h1>
     <ul id="group">
@@ -31,6 +32,7 @@
                 <button name="del_pupil" value="<%=pupil.getId()%>|<%=group.getId()%>">Удалить ученика</button>
             </form>
         <%}%>
+        <hr>
         <li>
             <button onclick="showWindow($('#add_pupil'),$('#add_pupil form'))" type="button" >Добавить ученика</button>
         </li>

@@ -8,12 +8,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Вход</title>
 </head>
 <body>
 <%@ include file="../head.jsp" %>
 <div id="content">
-    <form action="Login">
+    <form action="Login" method="post">
         <table>
             <tr>
                 <td><span>Please enter your username </span></td>

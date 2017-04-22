@@ -9,17 +9,18 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
-    <title>Title</title>
-</head>
-<body>
-<%@ include file="head.jsp" %>
 <%
     Operation op = new Operation();
     op.connect();
     int idTest = (Integer)request.getAttribute("id_test");
     TestsEntity test = (TestsEntity) op.getById(idTest,TestsEntity.class);
 %>
+<head>
+    <title>Результаты теста <%=test.getTitle()%></title>
+</head>
+<body>
+<%@ include file="head.jsp" %>
+
 <div class="content" >
     <form method="post" action="OperationResult">
         <table id="results">

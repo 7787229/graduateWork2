@@ -10,17 +10,18 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
-    <title>Title</title>
-</head>
-<body>
-<%@ include file="head.jsp" %>
 <%
     UsersEntity currentUser =   (UsersEntity) (session.getAttribute("currentSessionUser"));
     Operation op = new Operation();
     op.connect();
     Pupil pupil = (Pupil) op.getById(currentUser.getId(),Pupil.class);
 %>
+<head>
+    <title>Профиль ученика <%=currentUser.getLogin()%></title>
+</head>
+<body>
+<%@ include file="head.jsp" %>
+
 <div id="content">
     <ul id="groups">
         <%
@@ -28,7 +29,7 @@
                 int idGroup = group.getId();
         %>
         <li class="group">
-            <label>
+            <label style="display: table">
                 <span><b><%=group.getTitle() %></b></span>
             </label>
             <ul id ="tests">
@@ -52,8 +53,7 @@
 
         <%} %>
     </ul>
-    <form  method="post" action="SelectTest">
-        <button name="exit" value="exit">exit</button>
+    <form  method="post" action="SelectTest" style="float: left">
         <div id="start_test">
             <%
                 if (request.getSession().getAttribute("test")!=null) {
