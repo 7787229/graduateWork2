@@ -19,160 +19,205 @@
 </head>
 <body>
 <%@ include file="head.jsp" %>
-
+    <div class="container">
     <form method="post" action="OperationTest">
-        <div class="content" >
-    <h1><%=test.getTitle()%></h1>
-    <ul id="test">
-        <li><button type="button" onclick="showWindow($('#change_test'),$('#change_test table'))">Редактировать тест</button></li>
-        <li><button type="button" onclick="showWindow($('#add_question'),$('#add_question table'));">Добавить вопрос</button></li>
+    <table  id="test" class="table">
+        <tr>
+            <td><h1><%=test.getTitle()%></h1></td>
+            <td>
+                <div class="btn-group">
+                    <button type="button" class ="toggle_options dropdown-toggle btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="options dropdown-menu" >
+                        <li><button data-toggle="modal" data-target="#change_test" class="btn btn-link option" type="button" >Редактировать тест</button></li>
+                        <li><button data-toggle="modal" data-target="#add_question" class="btn btn-link option" type="button" >Добавить вопрос</button></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
         <%for (QuestionsEntity question:test.getQuestions()){%>
-            <li class="question">
-                <button name="change_question" value="<%=question.getId()%>|<%=test.getId()%>" >
-                    <span><%=question.getText()%></span>
-                </button>
-                <button name="del_question" value="<%=question.getId()%>|<%=test.getId()%>">Удалить</button>
-            </li>
+            <tr class="question">
+                <td>
+                    <button class="btn btn-link" name="change_question" value="<%=question.getId()%>|<%=test.getId()%>" >
+                        <span><%=question.getText()%></span>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-default" name="del_question" value="<%=question.getId()%>|<%=test.getId()%>">Удалить</button>
+                </td>
+            </tr>
         <%}%>
-    </ul>
+    </table>
+
+
+        <div class="modal fade" id="change_question" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <%
+                        if(request.getAttribute("id_question")!=null){
+                            int idQuestion = (Integer) request.getAttribute("id_question");
+                            QuestionsEntity question = (QuestionsEntity)op.getById(idQuestion,QuestionsEntity.class);
+                    %>
+                    <script>
+                        $("#change_question").modal('show')
+                    </script>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" >Редактировать вопрос</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table id="fields_question" class="table modal-table">
+                            <tr>
+                                <td><label class="control-label">Текст</label></td>
+                                <td><input type="text" class="form-control"  placeholder="Текст" name="text_question" value="<%=question.getText()%>"></td>
+                            </tr>
+                            <tr>
+                                <td><label class="control-label">Тип</label></td>
+                                <td>
+                                    <select class="form-control" name="type">
+                                        <%
+                                            String select1="";
+                                            if(question.getType().equals("c")) select1="selected";
+                                        %>
+                                        <option value="c" <%=select1%>> Множественный выбор</option>
+                                        <%
+                                            String select2="";
+                                            if(question.getType().equals("r")) select2="selected";
+                                        %>
+                                        <option value="r" <%=select2%>>Одиночный выбор</option>
+                                        <%
+                                            String select3="";
+                                            if(question.getType().equals("n")) select3="selected";
+                                        %>
+                                        <option value="n" <%=select3%>>Без выбора</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label class="control-label">Очки</label></td>
+                                <td><input type="text" class="form-control"  placeholder="Очки" name="score" value="<%=question.getScore()%>"></td>
+                            </tr>
+                        </table>
+                        <table class="table modal-table" id ="variants">
+                            <tr>
+                                <th><label class="control-label">Ответы</label></th>
+                                <td></td>
+                                <th><label class="control-label">Правильность</label></th>
+                            </tr>
+                            <% int i =1;%>
+                            <%for (VariantsEntity variant:question.getVariants()){%>
+                            <tr>
+                                <td>
+                                    <input type="text" class="form-control"  placeholder="Текст" name="text_variant<%=i%>" value="<%=variant.getText()%>">
+                                </td>
+                                <td><button name="del_variant" class="btn btn-default" value="<%=variant.getId()%>|<%=question.getId()%>|<%=test.getId()%>">X</button></td>
+                                <td>
+                                    <%
+                                        String checked="";
+                                        if (variant.getAnswer()) checked ="checked";
+                                    %>
+                                    <input class="form-control" type="checkbox" <%=checked%>  name="answer<%=i%>" value="true">
+                                </td>
+                            </tr>
+                            <%
+                                    i++;
+                                }
+                            %>
+                            <tr>
+                                <td><button class="btn btn-default" type="button" onclick="$('#add_variant').css('display','table-row')">+</button></td>
+                            </tr>
+                            <tr style="display: none" id="add_variant">
+                                <td><input type="text" class="form-control"  placeholder="Текст" name="text_variant"></td>
+                                <td></td>
+                                <td><input type="checkbox" class="form-control"  name="new_answer"></td>
+                            </tr>
+                            <tr><td><button class="btn btn-default" name="add_variant" value="<%=question.getId()%>|<%=test.getId()%>">OK</button></td></tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="edit" value="<%=question.getId()%>|<%=test.getId()%>"  class="btn btn-primary">OK</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                    <%}%>
+                </div>
+            </div>
         </div>
 
 
-        <div id="change_question">
-            <%
-                if(request.getAttribute("id_question")!=null){
-                    int idQuestion = (Integer) request.getAttribute("id_question");
-                    QuestionsEntity question = (QuestionsEntity)op.getById(idQuestion,QuestionsEntity.class);
-            %>
 
-            <blockquote>
-                <script>
-                    showWindow($("#change_question"),$("#change_question blockquote"));
-                </script>
-            <table id="fields_question">
-                <tr>
-                    <td>Текст</td>
-                    <td><input type="text" name="text_question" value="<%=question.getText()%>"></td>
-                </tr>
-                <tr>
-                    <td>Тип</td>
-                    <td>
-                        <select name="type">
-                            <%
-                                String select1="";
-                                if(question.getType().equals("c")) select1="selected";
-                            %>
-                            <option value="c" <%=select1%>> Множественный выбор</option>
-                            <%
-                                String select2="";
-                                if(question.getType().equals("r")) select2="selected";
-                            %>
-                            <option value="r" <%=select2%>>Одиночный выбор</option>
-                            <%
-                                String select3="";
-                                if(question.getType().equals("n")) select3="selected";
-                            %>
-                            <option value="n" <%=select3%>>Без выбора</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Очки</td>
-                    <td><input type="text" name="score" value="<%=question.getScore()%>"></td>
-                </tr>
-            </table>
-            <table id ="variants">
-                <tr>
-                    <th>Ответы</th>
-                    <th>Правильность</th>
-                </tr>
-                <% int i =1;%>
-                <%for (VariantsEntity variant:question.getVariants()){%>
-                <tr>
-                    <td>
-                        <input type="text" name="text_variant<%=i%>" value="<%=variant.getText()%>">
-                        <button name="del_variant" value="<%=variant.getId()%>|<%=question.getId()%>|<%=test.getId()%>">X</button>
-                    </td>
-                    <td>
-                        <%
-                            String checked="";
-                            if (variant.getAnswer()) checked ="checked";
-                        %>
-                        <input type="checkbox" <%=checked%>  name="answer<%=i%>" value="true">
-                    </td>
-                </tr>
-                <%
-                        i++;
-                    }
-                %>
-                <tr>
-                    <td><button type="button" onclick="$('#add_variant').css('display','table-row')">+</button></td>
-                </tr>
-                <tr style="display: none" id="add_variant">
-                    <td><input type="text" name="text_variant"></td>
-                    <td><input type="checkbox" name="new_answer"></td>
-                    <td><button name="add_variant" value="<%=question.getId()%>|<%=test.getId()%>">OK</button></td>
-                </tr>
-            </table>
 
-            <button name="edit" value="<%=question.getId()%>|<%=test.getId()%>" >Редактировать</button>
-            </blockquote>
-            <%}%>
+
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="change_test" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" >Изменить тест</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table modal-table">
+                            <tr>
+                                <td><label class="control-label">Название</label></td>
+                                <td><input type="text"  class="form-control"  placeholder="Название" name="title_test" value="<%=test.getTitle()%>"></td>
+                            </tr>
+                            <tr>
+                                <td><label class="control-label">Время выполнения</label></td>
+                                <td><input type="text"  class="form-control"  placeholder="Время выполнения" name="time_test" value="<%=test.getTime()%>"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="edit_test" value="<%=test.getId()%>"  class="btn btn-primary">OK</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div style="display: none;" id="change_test">
-
-
-
-            <table>
-                <tr>
-                    <td>Название</td>
-                    <td><input type="text" name="title_test" value="<%=test.getTitle()%>"></td>
-                </tr>
-                <tr>
-                    <td>Время выполнения</td>
-                    <td><input type="text" name="time_test" value="<%=test.getTime()%>"></td>
-                </tr>
-                <tr>
-                    <td><button name="edit_test" value="<%=test.getId()%>">OK</button></td>
-                </tr>
-            </table>
-
-
-        </div>
-        <div style="display: none" id="add_question">
-
-
-
-
-            <table>
-                <tr>
-                    <td>Текст</td>
-                    <td><input type="text" name="new_text_question"></td>
-                </tr>
-                <tr>
-                    <td>тип</td>
-                    <td>
-                        <select name="new_type">
-                            <option value="c" > Множественный выбор</option>
-                            <option value="r" >>Одиночный выбор</option>
-                            <option value="n" >Без выбора</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Очки</td>
-                    <td><input type="text" name="new_score" ></td>
-                </tr>
-                <tr>
-                    <td><button name="add_question" value="<%=test.getId()%>">OK</button></td>
-                </tr>
-            </table>
-
-
+        <!-- Modal -->
+        <div class="modal fade" id="add_question" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" >Добавить вопрос</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table modal-table">
+                            <tr>
+                                <td><label class="control-label">Текст</label></td>
+                                <td><input type="text"  class="form-control"  placeholder="Текст" name="new_text_question"></td>
+                            </tr>
+                            <tr>
+                                <td><label class="control-label">тип</label></td>
+                                <td>
+                                    <select class="form-control" name="new_type">
+                                        <option value="c" > Множественный выбор</option>
+                                        <option value="r" >Одиночный выбор</option>
+                                        <option value="n" >Без выбора</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label class="control-label">Очки</label></td>
+                                <td><input type="text" class="form-control"  placeholder="Очки" name="new_score" ></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="add_question" value="<%=test.getId()%>"  class="btn btn-primary">OK</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </form>
-
+    </div>
 
 <%op.disconnect();%>
 </body>

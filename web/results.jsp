@@ -21,9 +21,9 @@
 <body>
 <%@ include file="head.jsp" %>
 
-<div class="content" >
+<div class="container" >
     <form method="post" action="OperationResult">
-        <table id="results">
+        <table id="results" class="table">
             <tr>
                 <th>Ученик</th>
                 <th>Прогресс</th>

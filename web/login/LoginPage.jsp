@@ -12,22 +12,26 @@
 </head>
 <body>
 <%@ include file="../head.jsp" %>
-<div id="content">
-    <form action="Login" method="post">
-        <table>
-            <tr>
-                <td><span>Please enter your username </span></td>
-                <td><input type="text" name="login"/></td>
-            </tr>
-            <tr>
-                <td><span>Please enter your password</span></td>
-                <td><input type="text" name="password"/></td>
-            </tr>
-            <tr>
-                <td><input type="submit" value="submit"></td>
-            </tr>
+<div class="container">
+    <form class="form-horizontal" action="Login" method="post">
+        <div class="form-group">
+            <label for="inputLogin" class="col-sm-4 control-label">Логин</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputLogin" placeholder="Логин" name="login">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword" class="col-sm-4 control-label">Пароль</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputPassword" placeholder="Пароль" name="password">
+            </div>
+        </div>
 
-        </table>
+        <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-8">
+                <button type="submit" class="btn btn-default">Вход</button>
+            </div>
+        </div>
     </form>
 </div>
 </body>

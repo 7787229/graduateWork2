@@ -12,8 +12,11 @@
 </head>
 <body>
 <%@ include file="../head.jsp" %>
-<center>
-    Данные не корректны
-</center>
+    <div class="container text-center">
+        <p class="bg-danger">
+            Данные не корректны
+        </p>
+    </div>
+
 </body>
 </html>

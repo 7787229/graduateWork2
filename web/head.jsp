@@ -27,29 +27,43 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.1.1.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/check.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/lib.js"></script>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
+    <!--<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css"> -->
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/general.css">
 </head>
 <body>
-<div class="content">
     <header>
-        <ul>
-            <li><a href="${pageContext.request.contextPath}/index.jsp">Главная</a></li>
-            <li><a href="${pageContext.request.contextPath}/login/LoginPage.jsp">Вход</a></li>
-            <li><a href="${pageContext.request.contextPath}/login/regestration.jsp">Регестрация</a></li>
-        </ul>
-        <%
-            if(session.getAttribute("currentSessionUser")!=null) {
-                UsersEntity user  = (UsersEntity) (session.getAttribute("currentSessionUser"));
-                if(user.getRole().equals("teacher")) {
+        <div class="container navbar navbar-default navbar-static-top">
+            <ul class="nav navbar-nav " >
+                <li ><a href="${pageContext.request.contextPath}/index.jsp">Главная</a></li>
+                <li><a href="${pageContext.request.contextPath}/login/LoginPage.jsp">Вход</a></li>
+                <li><a href="${pageContext.request.contextPath}/login/regestration.jsp">Регистрация</a></li>
+            </ul>
+            <%
+                if(session.getAttribute("currentSessionUser")!=null) {
+                    UsersEntity user  = (UsersEntity) (session.getAttribute("currentSessionUser"));
+            %>
+            <ul class="nav navbar-nav pull-right" >
+                <li>
+                    <a>
+                        <span>Перейти к</span>
+                    </a>
+                </li>
+                <li>
+                    <%if(user.getRole().equals("teacher")) {%>
+                    <a  href='${pageContext.request.contextPath}/teacherProfile.jsp'> <%= user.getLogin()%></a>
+                    <% } if(user.getRole().equals("pupil")) {%>
+                    <a  href='${pageContext.request.contextPath}/pupilProfile.jsp'> <%= user.getLogin()%></a>
+                </li>
+                <%}%>
+                <li>
+                    <a class="btn btn-info btn-md" href="${pageContext.request.contextPath}/login/Login?exit=1 %>'">Выход  </a>
+                </li>
+            </ul>
+            <% }%>
 
-        %>
-        <span>Перейти к</span>	 <a style="display: inline" href='${pageContext.request.contextPath}/teacherProfile.jsp'> <%= user.getLogin()%></a>
-        <% } if(user.getRole().equals("pupil")) {%>
-        <span>Перейти к</span> <a style="display: inline" href='${pageContext.request.contextPath}/pupilProfile.jsp'> <%= user.getLogin()%></a>
-        <%} %>
-        <button onclick="window.location.href = '${pageContext.request.contextPath}/login/Login?exit=1 %>'"> Выход</button>
-        <%}%>
+        </div>
     </header>
-</div>
 </body>
 </html>

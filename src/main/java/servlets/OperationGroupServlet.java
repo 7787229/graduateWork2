@@ -48,9 +48,11 @@ public class OperationGroupServlet extends HttpServlet {
             int idPupil = Integer.parseInt(parts[0]);
             int idGroup = Integer.parseInt(parts[1]);
             GroupsEntity group =(GroupsEntity)op.getById(idGroup,GroupsEntity.class);
-            for (Pupil pupil:group.getPupils()){
-                if (pupil.getId()==idPupil){
-                    group.getPupils().remove(pupil);
+            if(group.getPupils().size()!=0) {
+                for (Pupil pupil : group.getPupils()) {
+                    if (pupil.getId() == idPupil) {
+                        group.getPupils().remove(pupil);
+                    }
                 }
             }
             op.commit();

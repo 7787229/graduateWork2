@@ -1,0 +1,41 @@
+form{
+    display: table;
+    margin: 0 auto;
+}
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{
+    vertical-align: middle;
+}
+.btn-link{
+    color: #e38d13;
+}
+.btn-group > .btn, .btn-group-vertical > .btn {
+    float: none;
+}
+button.test{
+    width: 200px;
+}
+.option:hover {
+    background: red;
+    text-decoration: none;
+}
+
+.option {
+    color: #145874;
+    width: 100%;
+}
+.open-groups:hover + .dropdown-menu, .open-groups+ .dropdown-menu:hover
+{
+    display: block;
+    top: 105px;
+    left: 130px;
+
+}
+.modal-table td,.modal-table th,tr.no-border td,tr.no-border th{
+    border: none !important;
+}
+input[type="radio"], input[type="checkbox"] {
+    margin-right: 10px;
+}
+.red{
+    border:1px solid red;
+}

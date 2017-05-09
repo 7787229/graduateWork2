@@ -21,39 +21,62 @@
 <body>
 <%@ include file="head.jsp" %>
 
-<div class="content" >
-    <h1><%=group.getTitle()%></h1>
-    <ul id="group">
-        <%for (Pupil pupil:group.getPupils()){%>
-            <li class="pupil">
-                <span><%=pupil.getLogin()%></span>
-            </li>
-            <form  method="post" action="OperationGroup">
-                <button name="del_pupil" value="<%=pupil.getId()%>|<%=group.getId()%>">Удалить ученика</button>
-            </form>
-        <%}%>
-        <hr>
-        <li>
-            <button onclick="showWindow($('#add_pupil'),$('#add_pupil form'))" type="button" >Добавить ученика</button>
-        </li>
-        <li>
-            <form method="post" action="OperationGroup">
-            <button  name="del_group" value="<%=group.getId()%>">Удалить группу</button>
-            </form>
-        </li>
-    </ul>
-</div>
-<div id="add_pupil" style="display: none">
-    <form method="post" action="OperationGroup">
-        <table>
+<div class="container" >
+    <form  method="post" action="OperationGroup">
+        <table id="group" class="table">
             <tr>
-                <td>Логин ученика</td>
-                <td><input type="text" name="login_pupil"></td>
+                <td><h1><%=group.getTitle()%></h1></td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class ="toggle_options dropdown-toggle btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="options dropdown-menu">
+                            <li>
+                                <button class="btn btn-link option" type="button" data-toggle="modal" data-target="#add_pupil" >Добавить ученика</button>
+                            </li>
+                            <li>
+                                <button  class="btn btn-link option" name="del_group" value="<%=group.getId()%>">Удалить группу</button>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
-            <tr>
-                <td><button name="add_pupil" value="<%=group.getId()%>">OK </button></td>
-            </tr>
+            <%for (Pupil pupil:group.getPupils()){%>
+                <tr class="pupil">
+                    <td><span><%=pupil.getLogin()%></span></td>
+                    <td><button class="btn btn-default" name="del_pupil" value="<%=pupil.getId()%>|<%=group.getId()%>">Удалить ученика</button></td>
+                </tr>
+
+            <%}%>
+
         </table>
+
+
+
+        <div class="modal fade" id="add_pupil" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" >Добавить ученика</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table modal-table">
+                            <tr >
+                                <td ><label class="control-label">Логин ученика</label></td>
+                                <td ><input type="text" class="form-control"  placeholder="Логин ученика" name="login_pupil"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="add_pupil" value="<%=group.getId()%>"  class="btn btn-primary">OK</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </form>
 </div>
 <%op.disconnect();%>

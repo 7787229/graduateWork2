@@ -7,35 +7,48 @@
 </head>
 <body>
 	<%@ include file="../head.jsp" %>
-	<div id="content">
-	<form id="regestrationForm" action="Regestration" method="post">
-		<table>
-			<tr>
-				<td><span>Логин</span></td>
-				<td><input type="text" name="login"></td>
-			</tr>
-			<tr>
-				<td><span>Пароль</span></td>
-				<td><input type="password" name="password"></td>
-			</tr>
-			<tr>
-				<td><span>Повторите пароль</span></td>
-				<td><input type="password" name="confirm_password"></td>
-			</tr>
-			<tr>
-				<td><span>Ваша роль</span></td>
-				<td>
-					<select name="role">
-						<option value="pupil">Ученик</option>
-						<option value="teacher">Учитель</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td><input type="submit" value="регистрация"></td>
-			</tr>
-		</table>
-	</form>
+	<div id="conteiner">
+
+
+
+
+
+
+		<form id="regestrationForm" class="form-horizontal" action="Regestration" method="post" >
+				<div class="form-group">
+					<label for="inputLogin" class="col-sm-4 control-label">Логин</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="inputLogin" placeholder="Логин" name="login">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword" class="col-sm-4 control-label">Пароль</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="inputPassword" placeholder="Пароль" name="password">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputConfimPassword" class="col-sm-4 control-label">Повторите пароль</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="inputConfimPassword" placeholder="Повторите пароль" name="confirm_password">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputRole" class="col-sm-4 control-label">Выберите роль</label>
+					<div class="col-sm-8">
+						<select name="role" id="inputRole" class="form-control">
+							<option value="pupil">Ученик</option>
+							<option value="teacher">Учитель</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-4 col-sm-8">
+						<button type="submit" class="btn btn-default">Регестрация</button>
+					</div>
+				</div>
+			</form>
+
 </div>
 </body>
 </html>

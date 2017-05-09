@@ -22,39 +22,39 @@
 <body>
 <%@ include file="head.jsp" %>
 
-<div id="content">
-    <ul id="groups">
+<div class="container">
+    <form  method="post" action="SelectTest" >
+    <table id="groups" class="table pull-left" style="width: 200px;>
         <%
             for (GroupsEntity group : pupil.getGroups() ) {
                 int idGroup = group.getId();
         %>
-        <li class="group">
-            <label style="display: table">
+        <tr class="group">
+            <th class="text-center" colspan="2">
                 <span><b><%=group.getTitle() %></b></span>
-            </label>
-            <ul id ="tests">
-                <%
-                    for(TestsEntity test: group.getTests()) {
-                        int idTest=test.getId();
-                %>
-                <li class="test">
-                    <label onclick="window.location.href = '${pageContext.request.contextPath}/SelectTest?idTest=<%=idTest %>'">
-                        <span><%=test.getTitle() %></span>
+            </th>
 
-                    </label>
-                </li>
+        </tr>
+
+            <%
+                for(TestsEntity test: group.getTests()) {
+                    int idTest=test.getId();
+            %>
+            <tr class="test">
+                <td>
+                    <a href="${pageContext.request.contextPath}/SelectTest?idTest=<%=idTest %>"><%=test.getTitle() %></a>
+                </td>
+            </tr>
 
 
-                <%} %>
-            </ul>
-        </li>
+            <%} %>
+
 
 
 
         <%} %>
-    </ul>
-    <form  method="post" action="SelectTest" style="float: left">
-        <div id="start_test">
+    </table>
+        <table  id="start_test" class="pull-left table" style="width: 300px;margin-left: 50px">
             <%
                 if (request.getSession().getAttribute("test")!=null) {
                     HttpSession ses =request.getSession();
@@ -69,18 +69,17 @@
                     ses.setAttribute("score", question.getScore());
                     HashMap<String, Object>[] historyAnswers =  (HashMap<String, Object>[]) ses.getAttribute("historyAnswers");
             %>
-            <span><%=test.getTitle() %></span>
-            <div id="question">
+            <tr class="text-center" ><td ><b><%=test.getTitle() %></b></td></tr>
                 <%
                     String type="";
                     if(question.getType().equals("r")) type="radio";
                     if(question.getType().equals("c")) type="checkbox";
                     if(question.getType().equals("n")) type="text";
                 %>
-                <span><%=question.getText() %></span>
+                <tr class="no-border"><td><label><%=question.getText() %></label></td></tr>
                 <%for (int i=0;i<variants.size();i++)  {%>
 
-                <div class="variant">
+                <tr class="variant">
                     <%if(type.equals("radio")) {%>
                     <%
                         String checked = "";
@@ -88,14 +87,17 @@
                             checked = "checked";
 
                     %>
-                    <input type='<%=type%>' name="answerRadio" value='<%=i %>' <%=checked %>>
+                    <td>
+                        <input type='<%=type%>' name="answerRadio" value='<%=i %>' <%=checked %>>
+                        <span><%=variants.get(i).getText() %></span>
+                    </td>
                     <%}  if(type.equals("text")){ %>
                     <%
                         String value="";
                         if (historyAnswers[numberQuestion]!=null)
                             value =String.valueOf(historyAnswers[numberQuestion].get("text"));
                     %>
-                    <input type='<%=type%>' name="answerText" value="<%=value%>">
+                    <td><input class="form-control" type='<%=type%>' name="answerText" value="<%=value%>"></td>
                     <%} if(type.equals("checkbox")){ %>
                     <%
                         String checked = "";
@@ -105,50 +107,64 @@
                                 checked = "checked";
                         }
                     %>
-                    <input type='<%=type%>' name="answerCheck<%=i %>" <%=checked %> >
+                    <td>
+                        <input  type='<%=type%>' name="answerCheck<%=i %>" <%=checked %> >
+                        <span><%=variants.get(i).getText() %></span>
+                    </td>
                     <%} %>
-                    <%if(!type.equals("text")) {%>
-                    <span><%=variants.get(i).getText() %></span>
-                    <%} %>
-                </div>
+
+                </tr>
                 <%} %>
-            </div>
-            <br>
+
             <%
                 String disabledPrev="";
                 if (numberQuestion==0) disabledPrev="disabled";
                 String disabledNext="";
                 if (numberQuestion==questions.size()-1) disabledNext="disabled";
             %>
-            <button <%=disabledPrev%> name="prev" value="<%=numberQuestion%>">prev</button>
-            <button <%=disabledNext%> name="next" value="<%=numberQuestion%>">next</button>
-            <button name="send" value="<%=numberQuestion%>">send</button>
+            <tr>
+            <td>
+                <button class="btn btn-default" <%=disabledPrev%> name="prev" value="<%=numberQuestion%>">Назад</button>
+                <button class="btn btn-default" <%=disabledNext%> name="next" value="<%=numberQuestion%>">Вперед</button>
+                <button class="btn btn-default" name="send" value="<%=numberQuestion%>">Сдать</button>
+            </td>
+            </tr>
             <%} %>
+        </table>
+        <div class="modal fade" id="final_test" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <%
+                        if(request.getAttribute("final_test")!=null){
+                            Float result = (Float) request.getAttribute("final_test");
+                    %>
+                    <script>
+                        $("#final_test").modal('show')
+                    </script>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" >Результат </h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table modal-table">
+                            <tr>
+                                <td>Ваш результат</td>
+                                <td><%=result%>%</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                    <%}%>
+                </div>
+            </div>
         </div>
     </form>
     <%
         op.disconnect();
     %>
 
-</div>
-<div id="final_test">
-    <table>
-        <%
-            if(request.getAttribute("final_test")!=null){
-                Float result = (Float) request.getAttribute("final_test");
-        %>
-        <script>
-            showWindow($("#final_test"),$("#final_test table"));
-        </script>
-        <tr>
-            <td>Ваш результат</td>
-            <td><%=result%>%</td>
-        </tr>
-        <tr>
-            <td><button>OK</button></td>
-        </tr>
-        <%}%>
-    </table>
 </div>
 </body>
 </html>
