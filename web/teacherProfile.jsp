@@ -36,20 +36,8 @@
                            <span class="caret"></span>
                        </button>
                        <ul class="options dropdown-menu pull-right" >
-                           <li ><button class="btn btn-link option" name="add_group" value="<%=test.getId()%>">Добавить в группу</button></li>
+                           <li ><button class="btn btn-link option" name="add_group" value="<%=test.getId()%>">Менеджер групп</button></li>
                            <li ><button class="btn btn-link option" name="open_results" value="<%=test.getId()%>">Просмотреть результаты</button></li>
-                           <li >
-                               <button  class="btn btn-link option open-groups" type="button" >
-                                    <span>В какие группы входит</span> <span class="caret"></span>
-                                </button>
-                               <ul class="dropdown-menu">
-                                   <%for (GroupsEntity group:test.getGroups()) {%>
-                                   <li>
-                                       <button class="group option btn btn-link" name="open_group" value="<%=group.getId()%>"><%=group.getTitle()%></button>
-                                   </li>
-                                   <%}%>
-                               </ul>
-                           </li>
                        </ul>
                    </div>
                </td>
@@ -59,7 +47,7 @@
         </table>
 
         <!-- Modal -->
-        <div class="modal fade" id="add_test" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div style="display: none" class="modal fade" id="add_test" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -74,7 +62,7 @@
                             </tr>
                             <tr >
                                 <td ><label class="control-label">Время выполнения</label></td>
-                                <td ><input type="text" class="form-control"  placeholder="Время выполнения" name="time_test"></td>
+                                <td ><input type="text" class="form-control int-value"  placeholder="Время выполнения" name="time_test"></td>
                             </tr>
                         </table>
                     </div>
@@ -87,7 +75,7 @@
         </div>
         <!-- Modal -->
 
-        <div class="modal fade" id="add_group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div style="display: none" class="modal fade" id="add_group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <% if(request.getAttribute("id_test")!=null) {
@@ -112,11 +100,19 @@
                             </tr>
                             <tr>
                                 <td><input class="form-control"  placeholder="Название" type="text" name="new_title_group" ></td>
-
-                                    <td><label class="control-label"><%=groups.get(0).getTitle()%></label></td>
-                                    <td><input  type="radio" name="id_group" value="<%=groups.get(0).getId()%>"></td>
-
+                                    <% if(groups.size()!=0) { %>
+                                        <td><label class="control-label"><%=groups.get(0).getTitle()%></label></td>
+                                        <%
+                                            String checked = "";
+                                            for(GroupsEntity group:test.getGroups()){
+                                                if (group.getId()==groups.get(0).getId()) checked="checked";
+                                            }
+                                        %>
+                                        <td><button class="group btn btn-link" name="open_group" value="<%=groups.get(0).getId()%>">Состав группы</button></td>
+                                        <td><input <%=checked%>  type="checkbox" name="id_group0" value="<%=groups.get(0).getId()%>"></td>
+                                    <%}%>
                             </tr>
+
 
                             <%
                                 for (int i=1;i<groups.size();i++) {
@@ -126,15 +122,19 @@
                             <tr>
                                 <td></td>
                                 <td><label class="control-label"><%=group.getTitle()%></label></td>
-                                <td><input  type="radio" name="id_group" value="<%=group.getId()%>"></td>
-                            </tr>
-                            <%}%>
-                            <tr>
-                                    <td></td>
-                                    <td><label class="control-label">Очистить</label></td>
-                                    <td><input  type="radio" name="id_group" value="clear"></td>
+
+                                <%
+                                    String checked2 = "";
+                                    for(GroupsEntity group2:test.getGroups()){
+                                        if (group2.getId()==group.getId()) checked2="checked";
+                                    }
+                                %>
+                                <td><button class="group btn btn-link" name="open_group" value="<%=group.getId()%>">Состав группы</button></td>
+                                <td><input <%=checked2%>  type="checkbox" name="id_group<%=i%>" value="<%=group.getId()%>"></td>
 
                             </tr>
+                            <%}%>
+
 
                         </table>
                     </div>

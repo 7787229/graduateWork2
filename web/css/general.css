@@ -23,13 +23,7 @@ button.test{
     color: #145874;
     width: 100%;
 }
-.open-groups:hover + .dropdown-menu, .open-groups+ .dropdown-menu:hover
-{
-    display: block;
-    top: 105px;
-    left: 130px;
 
-}
 .modal-table td,.modal-table th,tr.no-border td,tr.no-border th{
     border: none !important;
 }
@@ -38,4 +32,7 @@ input[type="radio"], input[type="checkbox"] {
 }
 .red{
     border:1px solid red;
+}
+.color-red{
+    color: red;
 }

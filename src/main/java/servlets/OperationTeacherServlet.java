@@ -55,28 +55,26 @@ public class OperationTeacherServlet extends HttpServlet {
             int idTeacher = Integer.parseInt(parts[1]);
             TestsEntity test = (TestsEntity)op.getById(idTest,TestsEntity.class);
             Teacher teacher = (Teacher)op.getById(idTeacher,Teacher.class);
-            GroupsEntity group;
-            if ( request.getParameter("id_group")!=null ) {
-                if(request.getParameter("id_group").equals("clear")){
-                    Set<GroupsEntity> groups = test.getGroups();
-                    for (GroupsEntity groupsEntity:groups){
-                        groupsEntity.getTests().remove(test);
+                int i=0;
+                for(GroupsEntity group:teacher.getGroups())  {
+                    if (request.getParameter("id_group"+i)!=null) {
+                        group.addTest(test);
                     }
-                } else {
-                    int idGroup = Integer.parseInt(request.getParameter("id_group"));
-                    group = (GroupsEntity) op.getById(idGroup, GroupsEntity.class);
-                    group.addTest(test);
-                    teacher.addGroup(group);
-                }
+                    if (request.getParameter("id_group"+i)==null) {
+                        group.getTests().remove(test);
+                    }
 
-            } else {
+                    i++;
+                }
+            if(request.getParameter("new_title_group")!="") {
                 String titleGroup = request.getParameter("new_title_group");
-                group =new GroupsEntity();
+                GroupsEntity group = new GroupsEntity();
                 group.setTitle(titleGroup);
                 group.addTest(test);
                 op.create(group);
                 teacher.addGroup(group);
             }
+            request.setAttribute("id_test",idTest);
             op.commit();
             op.disconnect();
             RequestDispatcher Dispatcher = getServletContext().getRequestDispatcher("/teacherProfile.jsp");

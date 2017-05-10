@@ -57,12 +57,28 @@
         <div class="modal fade" id="add_pupil" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
+                    <%
+                        String loginPupil="";
+                        if(request.getAttribute("no-pupil")!=null) {
+                          loginPupil = (String) request.getAttribute("no-pupil");
+                    %>
+                        <script>
+                            $("#add_pupil").modal('show')
+                        </script>
+                    <%}%>
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" >Добавить ученика</h4>
                     </div>
                     <div class="modal-body">
                         <table class="table modal-table">
+                            <%if (!loginPupil.equals("")){%>
+                                <tr>
+                                    <td class="color-red">
+                                        Пользоателя с логином <%=loginPupil%> не существует
+                                    </td>
+                                </tr>
+                            <%}%>
                             <tr >
                                 <td ><label class="control-label">Логин ученика</label></td>
                                 <td ><input type="text" class="form-control"  placeholder="Логин ученика" name="login_pupil"></td>

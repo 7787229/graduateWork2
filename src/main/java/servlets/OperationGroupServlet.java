@@ -26,8 +26,12 @@ public class OperationGroupServlet extends HttpServlet {
             int idGroup = Integer.parseInt(request.getParameter("add_pupil"));
             String loginPupil = request.getParameter("login_pupil");
             GroupsEntity group = (GroupsEntity)op.getById(idGroup,GroupsEntity.class);
-            Pupil pupil = (Pupil)op.findList(Pupil.class,"login",loginPupil).get(0);
-            group.addPupil(pupil);
+            if( op.findList(Pupil.class,"login",loginPupil).size()!=0 ) {
+                Pupil pupil = (Pupil) op.findList(Pupil.class, "login", loginPupil).get(0);
+                group.addPupil(pupil);
+            } else {
+                request.setAttribute("no-pupil",loginPupil);
+            }
             op.commit();
             op.disconnect();
             request.setAttribute("id_group",idGroup);

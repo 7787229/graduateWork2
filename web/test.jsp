@@ -51,7 +51,7 @@
     </table>
 
 
-        <div class="modal fade" id="change_question" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal fade" id="change_question" style="display: none" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <%
@@ -96,7 +96,7 @@
                             </tr>
                             <tr>
                                 <td><label class="control-label">Очки</label></td>
-                                <td><input type="text" class="form-control"  placeholder="Очки" name="score" value="<%=question.getScore()%>"></td>
+                                <td><input type="text" class="form-control int-value"  placeholder="Очки" name="score" value="<%=question.getScore()%>"></td>
                             </tr>
                         </table>
                         <table class="table modal-table" id ="variants">
@@ -125,18 +125,18 @@
                                 }
                             %>
                             <tr>
-                                <td><button class="btn btn-default" type="button" onclick="$('#add_variant').css('display','table-row')">+</button></td>
+                                <td><button  class="btn btn-default" type="button" onclick="$('#add_variant').css('display','table-row')">+</button></td>
                             </tr>
                             <tr style="display: none" id="add_variant">
                                 <td><input type="text" class="form-control"  placeholder="Текст" name="text_variant"></td>
                                 <td></td>
                                 <td><input type="checkbox" class="form-control"  name="new_answer"></td>
+                                <td><button type="button" onclick="addVariant(this)" class="btn btn-default" name="add_variant" value="<%=question.getId()%>|<%=test.getId()%>">OK</button></td>
                             </tr>
-                            <tr><td><button class="btn btn-default" name="add_variant" value="<%=question.getId()%>|<%=test.getId()%>">OK</button></td></tr>
                         </table>
                     </div>
                     <div class="modal-footer">
-                        <button name="edit" value="<%=question.getId()%>|<%=test.getId()%>"  class="btn btn-primary">OK</button>
+                        <button type="button" onclick="checkQuestion(this)" name="edit" value="<%=question.getId()%>|<%=test.getId()%>"  class="btn btn-primary">OK</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                     <%}%>
@@ -152,7 +152,7 @@
 
 
         <!-- Modal -->
-        <div class="modal fade" id="change_test" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal fade" id="change_test" style="display: none" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -167,7 +167,7 @@
                             </tr>
                             <tr>
                                 <td><label class="control-label">Время выполнения</label></td>
-                                <td><input type="text"  class="form-control"  placeholder="Время выполнения" name="time_test" value="<%=test.getTime()%>"></td>
+                                <td><input type="text"  class="form-control int-value"  placeholder="Время выполнения" name="time_test" value="<%=test.getTime()%>"></td>
                             </tr>
                         </table>
                     </div>
@@ -179,7 +179,7 @@
             </div>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="add_question" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal fade" style="display: none" id="add_question" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -204,7 +204,7 @@
                             </tr>
                             <tr>
                                 <td><label class="control-label">Очки</label></td>
-                                <td><input type="text" class="form-control"  placeholder="Очки" name="new_score" ></td>
+                                <td><input type="text" class="form-control int-value"  placeholder="Очки" name="new_score" ></td>
                             </tr>
                         </table>
                     </div>
